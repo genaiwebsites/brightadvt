@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bright Advertising | Leading Advertising and Marketing Agency</title>
+    <meta
+      name="description"
+      content="Bright Advertising: 45+ years of print, outdoor, television, radio, social and transit campaigns for brands like ITC, SBI Card, LIC and Keventer. Offices in Kolkata and Bengaluru."
+    />
+    <meta name="theme-color" content="#f4f2ec" />
+    <link rel="preload" href="/src/fonts/cabinet-grotesk-800.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:title" content="Bright Advertising" />
+    <meta property="og:description" content="Advertising made simple. 45+ years, 210+ active clients, 1,500+ campaigns." />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <script>
+      (function (d) {
+        d.classList.add("js");
+        try {
+          if (!sessionStorage.getItem("bright-intro") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            d.classList.add("intro");
+            sessionStorage.setItem("bright-intro", "1");
+          }
+        } catch (e) {}
+      })(document.documentElement);
+    </script>
+  </head>
+  <body>
+    <div id="root"><!--app--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

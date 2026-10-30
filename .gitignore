@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+reference/node_modules/
+
+# Production and build outputs
+dist/
+dist-ssr/
+.astro/
+reference/dist/
+reference/dist-ssr/
+reference/preview/
+
+# Environment files
+.env
+.env.production
+.env.local
+*.env
+!.env.example
+
+# Playwright & test artifacts
+tests/diff/
+test-results/
+playwright-report/
+
+# Archives & raw binary bundles
+*.zip
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
