@@ -19,6 +19,7 @@ reference/preview/
 
 # Playwright & test artifacts
 tests/diff/
+tests/protection-preview/
 test-results/
 playwright-report/
 

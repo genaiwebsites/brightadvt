@@ -1,0 +1,123 @@
+---
+// Demo Protection: Subtle pulsating watermark & capture deterrents for horizonwebcorp.com
+---
+
+<div id="hwc-watermark-overlay" class="demo-watermark-layer" aria-hidden="true"></div>
+
+<style is:inline>
+  .demo-watermark-layer {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 80;
+    pointer-events: none !important;
+    user-select: none !important;
+    mix-blend-mode: difference;
+    animation: watermark-pulse 8s ease-in-out infinite;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='140' viewBox='0 0 260 140'%3E%3Ctext x='65' y='35' font-size='6.2' font-family='ui-monospace, monospace' font-weight='600' letter-spacing='0.22em' fill='%23ffffff' text-anchor='middle' transform='rotate(-22 65 35)'%3Ehorizonwebcorp.com%3C/text%3E%3Ctext x='195' y='105' font-size='6.2' font-family='ui-monospace, monospace' font-weight='600' letter-spacing='0.22em' fill='%23ffffff' text-anchor='middle' transform='rotate(-22 195 105)'%3Ehorizonwebcorp.com%3C/text%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+
+  @keyframes watermark-pulse {
+    0%, 100% {
+      opacity: 0.016;
+    }
+    50% {
+      opacity: 0.034;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo-watermark-layer {
+      animation: none !important;
+      opacity: 0.024 !important;
+    }
+  }
+
+  /* Anti-print deterrent: hides layout and displays confidentiality notice */
+  @media print {
+    body {
+      display: none !important;
+    }
+    html::after {
+      content: "CONFIDENTIAL CLIENT PREVIEW · HORIZONWEBCORP.COM · DO NOT DISTRIBUTE OR REPRODUCE";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #121110;
+      text-align: center;
+      padding: 2rem;
+    }
+  }
+
+  /* Deter asset dragging */
+  img, canvas, svg {
+    -webkit-user-drag: none;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    const WATERMARK_ID = "hwc-watermark-overlay";
+
+    function ensureWatermark() {
+      let wm = document.getElementById(WATERMARK_ID);
+      if (!wm) {
+        wm = document.createElement("div");
+        wm.id = WATERMARK_ID;
+        wm.className = "demo-watermark-layer";
+        wm.setAttribute("aria-hidden", "true");
+        document.body.appendChild(wm);
+      }
+    }
+
+    // 1. Context menu prevention (disables right-click image saves and inspect shortcut)
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    }, { capture: true });
+
+    // 2. DevTools shortcut deterrents (F12, Ctrl+Shift+I/C/J, Cmd+Opt+I/C/J, Ctrl+U/S)
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "F12") {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.shiftKey || e.altKey) && ["I", "i", "J", "j", "C", "c"].indexOf(e.key) !== -1) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === "u" || e.key === "U" || e.key === "s" || e.key === "S")) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }, { capture: true });
+
+    // 3. Self-healing DOM guardian: re-adds/unhides watermark if client tries to remove or hide it in Elements inspector
+    if (typeof MutationObserver !== "undefined") {
+      const observer = new MutationObserver(function () {
+        const wm = document.getElementById(WATERMARK_ID);
+        if (!wm) {
+          ensureWatermark();
+        } else if (wm.style.display === "none" || wm.style.visibility === "hidden" || wm.style.opacity === "0") {
+          wm.style.display = "";
+          wm.style.visibility = "";
+          wm.style.opacity = "";
+        }
+      });
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["style", "class", "id"],
+      });
+    }
+  })();
+</script>
